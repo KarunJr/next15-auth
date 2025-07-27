@@ -6,7 +6,6 @@ import {
     DialogContent,
     DialogTrigger,
     DialogTitle,
-    DialogHeader,
 } from "@/components/ui/dialog"
 import { LoginForm } from './login-form';
 interface LoginButtonProps{
@@ -15,11 +14,10 @@ interface LoginButtonProps{
     asChild?: boolean;
 }
 
-const LoginButton = ({children, mode= "redirect", asChild}:LoginButtonProps) => {
+const LoginButton = ({children, mode= "redirect"}:LoginButtonProps) => {
     const router = useRouter();
     const onClick = ()=>{
-        router.push("/auth/login")
-        
+        router.push("/auth/login");
     }
 
     if(mode === "modal"){

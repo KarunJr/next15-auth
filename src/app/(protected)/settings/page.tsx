@@ -44,7 +44,7 @@ const SettingPage = () => {
     resolver: zodResolver(SettingsSchema),
     defaultValues: {
       name: user?.name || undefined,
-      email: user?.email! || undefined,
+      email: user?.email ?? undefined,
       password: undefined,
       newPassword: undefined,
       role: user?.role || undefined,

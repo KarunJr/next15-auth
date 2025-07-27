@@ -38,20 +38,22 @@ export const {
 
       if (!existingUser?.emailVerified) return false;
 
+      if (existingUser.isTwoFactorEnabled) {
+        const twoFactorConfirmation = await getTwoFactorConfirmationByUserId(
+          existingUser.id
+        );
 
-      if(existingUser.isTwoFactorEnabled){
-        const twoFactorConfirmation = await getTwoFactorConfirmationByUserId(existingUser.id)
-
-        console.log({twoFactorConfirmation});
-        if(!twoFactorConfirmation){
+        console.log({ twoFactorConfirmation });
+        if (!twoFactorConfirmation) {
           return false;
         }
 
         //Delete two factor confirmation for next sign in;
         await db.twoFactorConfirmation.delete({
-          where:{
-          id: twoFactorConfirmation.id}
-        })
+          where: {
+            id: twoFactorConfirmation.id,
+          },
+        });
       }
       return true;
     },
@@ -68,11 +70,10 @@ export const {
         session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as boolean;
       }
 
-
-      if(session.user){
+      if (session.user) {
         session.user.name = token.name;
         session.user.email = token.email!;
-        session.user.isOAuth = token.isOAuth as boolean
+        session.user.isOAuth = token.isOAuth as boolean;
       }
       return session;
     },
@@ -87,11 +88,11 @@ export const {
 
       const existingAccount = await getAccountByUserId(existingUser.id);
 
-      token.isOAuth = !!existingAccount
+      token.isOAuth = !!existingAccount;
       token.name = existingUser.name;
-      token.email = existingUser.email,
+      token.email = existingUser.email;
       token.role = existingUser.role;
-      token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled
+      token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
 
       return token;
     },
